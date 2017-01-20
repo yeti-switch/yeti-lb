@@ -1,0 +1,6 @@
+debian/debhelper-build-stamp
+debian/files
+debian/*.debhelper.log
+debian/*.debhelper
+debian/*.substvars
+debian/yeti-lb

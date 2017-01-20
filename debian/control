@@ -1,0 +1,14 @@
+Source: yeti-lb
+Maintainer: yeti team <dev@yeti-switch.org>
+Section: net
+Priority: optional
+Standards-Version: 3.9.2
+Build-Depends: debhelper (>= 9)
+
+Package: yeti-lb
+Section: net
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}, sed (>= 4.2.1), kamailio (>= 4.1.6), kamailio-xml-modules (>= 4.1.6), kamailio-utils-modules (>= 4.1.6)
+Conflicts: yeti-lb
+Description: load balancer configuration for YETI 
+	simple default configuration for loadbalancer based on kamailio

@@ -1,0 +1,43 @@
+#!/bin/bash
+
+set -e 
+
+case "$1" in 
+	configure)
+		if [ -e /usr/share/debconf/confmodule ]; then
+			. /usr/share/debconf/confmodule
+
+			db_get yeti-lb/node_addr
+			if [ -n "$RET" ]; then
+				#replace {node_addr} placeholder in dispatcher.list
+				sed "s/{node_addr}/$RET/" /etc/kamailio/dispatcher.list.tpl > /etc/kamailio/dispatcher.list
+			fi
+
+			db_get yeti-lb/lb_addr
+			if [ -n "$RET" ]; then
+				#replace {node_addr} placeholder in dispatcher.list
+				sed "s/{lb_addr}/$RET/" /etc/kamailio/lb.cfg.tpl > /etc/kamailio/lb.cfg
+			fi
+
+			#enable kamailio in defaults, set our config as CFGFILE
+			echo "processing /etc/default/kamailio"
+			sed -i 's/^#\(RUN_KAMAILIO\).*$/\1=yes/;s/^#\(CFGFILE\)=.*$/\1=\/etc\/kamailio\/kamailio.cfg/' /etc/default/kamailio
+
+			#replace default configuration file
+			echo "replace /etc/kamailio/kamailio.cfg file"
+			cp /etc/kamailio/kamailio.cfg /etc/kamailio/kamailio-dist.cfg
+			cp /etc/kamailio/kamailio-yeti.cfg /etc/kamailio/kamailio.cfg
+		fi
+	;;
+	abort-upgrade|abort-remove|abort-deconfigure)
+		exit 0
+	;;
+	*)
+		echo "postinst called with unknown argument \$1'" >&2
+		exit 1
+	;;
+esac
+
+. /usr/share/debconf/confmodule
+
+exit 0

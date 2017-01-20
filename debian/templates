@@ -1,0 +1,9 @@
+Template: yeti-lb/node_addr
+Type: string
+Default: 127.0.0.1:5061
+Description: type in your YETI node address:
+
+Template: yeti-lb/lb_addr
+Type: string
+Default: 127.0.0.1:5060
+Description: type in your load balancer signalling address:

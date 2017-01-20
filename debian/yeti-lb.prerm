@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -e 
+
+invoke-rc.d kamailio stop || true
+
+if [ "$1" = "purge" -a -e /usr/share/debconf/confmodule ]; then
+	. /usr/share/debconf/confmodule
+	db_purge
+fi
+
+#try to revert kamailio.cfg replace
+echo "restore original kamailio.cfg"
+cp /etc/kamailio/kamailio-dist.cfg /etc/kamailio/kamailio.cfg || true
+
+exit 0
