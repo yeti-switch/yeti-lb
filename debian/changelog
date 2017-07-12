@@ -1,3 +1,12 @@
+yeti-lb (1.0.6) jessie; urgency=medium
+
+  * kamcmd fix
+  * rerouting fix
+  * remove not used modules
+  * rsyslog config installation
+
+ --  <sdi@lea>  Wed, 12 Jul 2017 21:53:24 +0300
+
 yeti-lb (1.0.5) wheezy; urgency=low
 
   * fix lb.cfg template

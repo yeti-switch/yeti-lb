@@ -1,0 +1,3 @@
+if $syslogfacility-text == 'local0' then /var/log/kamailio.log
+& ~
+
