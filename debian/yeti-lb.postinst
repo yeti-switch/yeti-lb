@@ -27,6 +27,11 @@ case "$1" in
 			echo "replace /etc/kamailio/kamailio.cfg file"
 			cp /etc/kamailio/kamailio.cfg /etc/kamailio/kamailio-dist.cfg
 			cp /etc/kamailio/kamailio-yeti.cfg /etc/kamailio/kamailio.cfg
+
+	                if [ -d /run/systemd/system ] && [ -x /usr/bin/deb-systemd-invoke ]; then
+	                        deb-systemd-invoke restart rsyslog.service >/dev/null || true
+        	        fi
+
 		fi
 	;;
 	abort-upgrade|abort-remove|abort-deconfigure)

@@ -1,5 +1,3 @@
-##!define DEBUG_MODE
-
 #!subst "/GRP_ID/1/"
 
 #!subst "/VER/YETI balancing node/"
