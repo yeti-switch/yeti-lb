@@ -1,3 +1,9 @@
+yeti-lb (1.1.0) stretch; urgency=medium
+
+  * kamailio 5.2
+
+ --  <sdi@lea>  Fri, 06 Apr 2019 18:21:35 +0300
+
 yeti-lb (1.0.7) jessie; urgency=medium
 
   * fix for new kamailio 
