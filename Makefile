@@ -3,6 +3,10 @@ pkg_name = yeti-lb
 lintian_flag := $(if $(lintian),--lintian,--no-lintian)
 debian_host_release != lsb_release -sc
 
+export DEBFULLNAME ?= YETI development team
+export DEBEMAIL ?= dev@yeti-switch.org
+
+
 #Logging functions
 define info
         echo -e '\n\e[33m> msg \e[39m\n'
