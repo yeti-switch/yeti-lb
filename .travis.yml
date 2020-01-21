@@ -14,29 +14,56 @@ jobs:
   - stage: stable package
     if: branch != master OR tag =~ ^.*$
     env: CACHE_NAME=stretch_package
-    name: Stable Stretch Package
-    script: &1
-    - docker build -t yeti-lb -f ./ci/build_stretch.Dockerfile .
-    - docker run --name yeti-lb yeti-lb && docker commit yeti-lb yeti-lb:built
+    name: Stable package Debian 9
+    script: &build_stretch
+    - docker build -t yeti-lb-9 -f ./ci/build_stretch.Dockerfile .
+    - docker run --name yeti-lb-9 yeti-lb-9 && docker commit yeti-lb-9 yeti-lb-9:built
     deploy:
       skip_cleanup: true
       provider: script
-      script: docker run --name yeti-lb-deploy yeti-lb:built ci/deploy.sh "$API_ENDPOINT"
-        stretch "${TRAVIS_TAG:0:3}" main /build/*.deb
+      script: docker run --name yeti-lb-9-deploy yeti-lb-9:built ci/deploy.sh "$API_ENDPOINT" stretch "${TRAVIS_TAG%.*}" main /build/*.deb
       on:
         tags: true
         condition: "$TRAVIS_TAG != *-master*"
         repo: yeti-switch/yeti-lb
-  - stage: nightly package
-    if: branch = master
-    env: CACHE_NAME=stretch_package
-    name: Nightly Stretch Package
-    script: *1
+  - stage: stable package
+    if: branch != master OR tag =~ ^.*$
+    env: CACHE_NAME=buster_package
+    name: Stable package Debian 10
+    script: &build_buster
+    - docker build -t yeti-lb-10 -f ./ci/build_buster.Dockerfile .
+    - docker run --name yeti-lb-10 yeti-lb-10 && docker commit yeti-lb-10 yeti-lb-10:built
     deploy:
       skip_cleanup: true
       provider: script
-      script: docker run --name yeti-lb-deploy yeti-lb:built ci/deploy.sh "$API_ENDPOINT"
-        stretch nightly main /build/*.deb
+      script: docker run --name yeti-lb-10-deploy yeti-lb-10:built ci/deploy.sh "$API_ENDPOINT" buster "${TRAVIS_TAG%.*}" main /build/*.deb
+      on:
+        tags: true
+        condition: "$TRAVIS_TAG != *-master*"
+        repo: yeti-switch/yeti-lb
+
+  - stage: nightly package
+    if: branch = master
+    env: CACHE_NAME=stretch_package
+    name: Nightly package Debian 9
+    script: *build_stretch
+    deploy:
+      skip_cleanup: true
+      provider: script
+      script: docker run --name yeti-lb-9-deploy yeti-lb-9:built ci/deploy.sh "$API_ENDPOINT" stretch nightly main /build/*.deb
+      on:
+        all_branches: true
+        repo: yeti-switch/yeti-lb
+
+  - stage: nightly package
+    if: branch = master
+    env: CACHE_NAME=buster_package
+    name: Nightly package Debian 10
+    script: *build_buster
+    deploy:
+      skip_cleanup: true
+      provider: script
+      script: docker run --name yeti-lb-10-deploy yeti-lb-10:built ci/deploy.sh "$API_ENDPOINT" buster nightly main /build/*.deb
       on:
         all_branches: true
         repo: yeti-switch/yeti-lb
